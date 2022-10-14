@@ -1,6 +1,7 @@
 package com.example.testhammersystem.ui.screen.main.componet
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -18,6 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.testhammersystem.ui.screen.main.CategoryChip
 import com.example.testhammersystem.ui.theme.InactiveElement
+import com.example.testhammersystem.ui.theme.MainSurface
 import com.example.testhammersystem.ui.theme.Primary
 import com.example.testhammersystem.ui.theme.ShadowColor
 import com.example.testhammersystem.util.drawColoredShadow
@@ -30,9 +32,9 @@ fun CategoryChipGroup(
     onClickChip: (CategoryChip) -> Unit
 ) {
     LazyRow(
-        modifier = modifier,
+        modifier = modifier.background(Color.White),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        contentPadding = PaddingValues(start = 16.dp)
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
     ) {
 
         items(items = listChip) { item ->
