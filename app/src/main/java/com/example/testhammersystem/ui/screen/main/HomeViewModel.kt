@@ -3,6 +3,7 @@ package com.example.testhammersystem.ui.screen.main
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
+import com.example.testhammersystem.data.model.Food
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +26,8 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         CategoryChip(id = 5, title = "Бургеры"),
     )
 
+    private val listFoods = _uiState.value.foodsList.getMockData()
+
     private val listBanner = listOf(
         "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
         "https://images.freeclues.com/assets/images/coupons/coupon_d5896d2fa2d3b567695acbca6fcadf42.jpg",
@@ -42,6 +45,9 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 chipUiState = it.chipUiState.copy(
                     value = listCategory,
                     selectedChip = listCategory.first()
+                ),
+                foodsList = it.foodsList.copy(
+                    value = listFoods
                 )
             )
         }
@@ -63,7 +69,8 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 @Stable
 data class HomeUiState(
     val bannerList: CollectionBannerList = CollectionBannerList(),
-    val chipUiState: ChipUiState = ChipUiState()
+    val chipUiState: ChipUiState = ChipUiState(),
+    val foodsList: CollectionFoodsList = CollectionFoodsList()
 )
 
 @Immutable
@@ -72,14 +79,77 @@ data class CollectionBannerList(
 )
 
 @Immutable
+data class CollectionFoodsList(
+    val value: List<Food> = emptyList()
+) {
+    fun getMockData(): List<Food> {
+        return listOf(
+            Food(
+                id = "1",
+                img = "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
+                name = "Ветчина и грибы",
+                dsc = "Ветчина,шампиньоны, увеличинная порция моцареллы, томатный соус",
+                price = 345.0
+            ),
+            Food(
+                id = "1",
+                img = "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
+                name = "Ветчина и грибы",
+                dsc = "Ветчина,шампиньоны, увеличинная порция моцареллы, томатный соус",
+                price = 345.0
+            ),
+            Food(
+                id = "1",
+                img = "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
+                name = "Ветчина и грибы",
+                dsc = "Ветчина,шампиньоны, увеличинная порция моцареллы, томатный соус",
+                price = 345.0
+            ),
+            Food(
+                id = "1",
+                img = "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
+                name = "Ветчина и грибы",
+                dsc = "Ветчина,шампиньоны, увеличинная порция моцареллы, томатный соус",
+                price = 345.0
+            ),
+            Food(
+                id = "1",
+                img = "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
+                name = "Ветчина и грибы",
+                dsc = "Ветчина,шампиньоны, увеличинная порция моцареллы, томатный соус",
+                price = 345.0
+            ),
+            Food(
+                id = "1",
+                img = "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
+                name = "Ветчина и грибы",
+                dsc = "Ветчина,шампиньоны, увеличинная порция моцареллы, томатный соус",
+                price = 345.0
+            ),
+            Food(
+                id = "1",
+                img = "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
+                name = "Ветчина и грибы",
+                dsc = "Ветчина,шампиньоны, увеличинная порция моцареллы, томатный соус",
+                price = 345.0
+            )
+        )
+    }
+}
+
+@Immutable
 data class ChipUiState(
     val value: List<CategoryChip> = emptyList(),
     val selectedChip: CategoryChip? = null
-)
+) {
+
+}
+
 
 data class CategoryChip(
     val id: Int,
     val title: String
 )
+
 
 
