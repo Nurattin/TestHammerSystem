@@ -27,6 +27,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
     )
 
     private val listFoods = _uiState.value.foodsList.getMockData()
+    private val listCity = _uiState.value.dropDownUiState.getMockData()
 
     private val listBanner = listOf(
         "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
@@ -48,6 +49,10 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 ),
                 foodsList = it.foodsList.copy(
                     value = listFoods
+                ),
+                dropDownUiState = it.dropDownUiState.copy(
+                    listCity = listCity,
+                    selectedCity = listCity.first()
                 )
             )
         }
@@ -63,6 +68,27 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun changeCity(city: String) {
+        _uiState.update {
+            it.copy(
+                dropDownUiState = it.dropDownUiState.copy(
+                    selectedCity = city,
+                    isVisibility = false
+                )
+            )
+        }
+    }
+
+    fun dropDownMenuIsVisibly(){
+        _uiState.update {
+            it.copy(
+                dropDownUiState = it.dropDownUiState.copy(
+                    isVisibility = !it.dropDownUiState.isVisibility
+                )
+            )
+        }
+    }
+
 }
 
 
@@ -70,13 +96,32 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 data class HomeUiState(
     val bannerList: CollectionBannerList = CollectionBannerList(),
     val chipUiState: ChipUiState = ChipUiState(),
-    val foodsList: CollectionFoodsList = CollectionFoodsList()
+    val foodsList: CollectionFoodsList = CollectionFoodsList(),
+    val dropDownUiState: DropDownUiState = DropDownUiState()
+
 )
 
 @Immutable
 data class CollectionBannerList(
     val value: List<String> = emptyList()
 )
+
+@Immutable
+data class DropDownUiState(
+    val isVisibility: Boolean = false,
+    val listCity: List<String> = emptyList(),
+    val selectedCity: String = ""
+) {
+    fun getMockData(): List<String> {
+        return listOf(
+            "Москва",
+            "Махачкала",
+            "Ростов",
+            "Краснодар",
+            "Котлин"
+        )
+    }
+}
 
 @Immutable
 data class CollectionFoodsList(
@@ -140,11 +185,8 @@ data class CollectionFoodsList(
 @Immutable
 data class ChipUiState(
     val value: List<CategoryChip> = emptyList(),
-    val selectedChip: CategoryChip? = null
-) {
-
-}
-
+    val selectedChip: CategoryChip? = null,
+)
 
 data class CategoryChip(
     val id: Int,

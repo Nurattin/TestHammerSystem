@@ -1,12 +1,16 @@
 package com.example.testhammersystem.ui.screen.main.componet
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,7 +24,16 @@ import androidx.compose.ui.unit.sp
 import com.example.testhammersystem.R
 
 @Composable
-fun TopAppBar(modifier: Modifier = Modifier) {
+fun TopAppBar(
+    modifier: Modifier = Modifier,
+    onClickQrCode: () -> Unit,
+    selectCity: String,
+    onClickDropDown: () -> Unit,
+    listCity: List<String>,
+    onDismissRequest: () -> Unit,
+    onClickCity: (String) -> Unit,
+    dropDownExpanded: Boolean
+) {
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -32,7 +45,7 @@ fun TopAppBar(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Москва",
+                text = selectCity,
                 fontFamily = FontFamily(
                     Font(R.font.roboto_medium, FontWeight.Medium)
                 ),
@@ -43,12 +56,31 @@ fun TopAppBar(modifier: Modifier = Modifier) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_drop),
                 contentDescription = null,
-                tint = Color(0xFF323232)
+                tint = Color(0xFF323232),
+                modifier = Modifier.clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(radius = 22.dp),
+                    onClick = onClickDropDown
+                )
             )
+            SelectedCity(
+                modifier = Modifier.align(Alignment.Bottom),
+                listCity = listCity,
+                onDismissRequest = onDismissRequest,
+                onClickCity = onClickCity,
+                selectedCity = selectCity,
+                expanded = dropDownExpanded
+            )
+
         }
 
         Icon(
-            modifier = Modifier,
+            modifier = Modifier
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(radius = 22.dp),
+                    onClick = onClickQrCode
+                ),
             painter = painterResource(id = R.drawable.ic_qr_code),
             contentDescription = null,
             tint = Color(0xFF323232)
@@ -59,5 +91,16 @@ fun TopAppBar(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 fun TopAppBarPreview() {
-    TopAppBar()
+    TopAppBar(
+        onClickQrCode = {},
+        selectCity = "Москва",
+        onClickDropDown = {},
+        onDismissRequest = {},
+        onClickCity = {},
+        listCity = listOf(
+            "Москва",
+            "Махачкала"
+        ),
+        dropDownExpanded = false
+    )
 }
