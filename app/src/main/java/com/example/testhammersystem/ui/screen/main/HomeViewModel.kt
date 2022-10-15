@@ -3,28 +3,30 @@ package com.example.testhammersystem.ui.screen.main
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
-import com.example.testhammersystem.data.model.Food
+import androidx.lifecycle.viewModelScope
+import com.example.testhammersystem.data.result.Result
+import com.example.testhammersystem.data.result.asResult
+import com.example.testhammersystem.domain.model.Food
+import com.example.testhammersystem.domain.use_case.GetFoodsDateUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ViewModel() {
+class HomeViewModel @Inject constructor(
+    private val getFoodsUseCase: GetFoodsDateUseCase
+) : ViewModel() {
 
     private var _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-    private val listCategory = listOf(
-        CategoryChip(id = 1, title = "Пицца"),
-        CategoryChip(id = 2, title = "Комбо"),
-        CategoryChip(id = 3, title = "Десерты"),
-        CategoryChip(id = 4, title = "Напитки"),
-        CategoryChip(id = 5, title = "Бургеры"),
-    )
+
+    private val listCategory = Category.values().map { it }
 
     private val listFoods = _uiState.value.foodsList.getMockData()
     private val listCity = _uiState.value.dropDownUiState.getMockData()
@@ -38,6 +40,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
 
 
     init {
+
         _uiState.update {
             it.copy(
                 bannerList = it.bannerList.copy(
@@ -45,7 +48,6 @@ class HomeViewModel @Inject constructor() : ViewModel() {
                 ),
                 chipUiState = it.chipUiState.copy(
                     value = listCategory,
-                    selectedChip = listCategory.first()
                 ),
                 foodsList = it.foodsList.copy(
                     value = listFoods
@@ -58,13 +60,27 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun changeCategory(item: CategoryChip) {
-        _uiState.update {
-            it.copy(
-                chipUiState = it.chipUiState.copy(
-                    selectedChip = item
-                )
-            )
+
+    fun changeCategory(item: Category) {
+
+        viewModelScope.launch {
+            getFoodsUseCase(item).asResult().collect {
+                when(val result = it){
+                    is Result.Error -> {}
+                    is Result.Loading -> {}
+                    is Result.Success -> {_uiState.update { currentState ->
+                        currentState.copy(
+                            chipUiState = currentState.chipUiState.copy(
+                                selectedChip = item,
+                            ),
+                            foodsList = currentState.foodsList.copy(
+                                value = result.data
+                            )
+                        )
+                    }}
+                }
+
+            }
         }
     }
 
@@ -79,7 +95,7 @@ class HomeViewModel @Inject constructor() : ViewModel() {
         }
     }
 
-    fun dropDownMenuIsVisibly(){
+    fun dropDownMenuIsVisibly() {
         _uiState.update {
             it.copy(
                 dropDownUiState = it.dropDownUiState.copy(
@@ -184,14 +200,16 @@ data class CollectionFoodsList(
 
 @Immutable
 data class ChipUiState(
-    val value: List<CategoryChip> = emptyList(),
-    val selectedChip: CategoryChip? = null,
+    val value: List<Category> = emptyList(),
+    val selectedChip: Category = Category.BestFood,
 )
-
-data class CategoryChip(
-    val id: Int,
-    val title: String
-)
+enum class Category(val cat: String) {
+    BestFood("Популярные"),
+    Burgers("Бургеры"),
+    Pizzas("Пицца"),
+    Drinks("Напитки"),
+    IceCream("Мороженное")
+}
 
 
 

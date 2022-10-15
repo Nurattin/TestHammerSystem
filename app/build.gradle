@@ -24,6 +24,7 @@ android {
         vectorDrawables {
             useSupportLibrary true
         }
+        signingConfig signingConfigs.debug
     }
 
     buildTypes {
@@ -74,7 +75,7 @@ dependencies {
     androidTestImplementation Libs.AndroidX.Test.espressoCore
     debugImplementation Libs.AndroidX.Compose.tooling
     debugImplementation Libs.AndroidX.Compose.toolingPreview
-    implementation "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha01"
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha02'
 
     //Hilt
     implementation Libs.Hilt.android
