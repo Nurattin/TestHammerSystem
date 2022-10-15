@@ -25,22 +25,13 @@ class HomeViewModel @Inject constructor(
     private var _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
 
-
     private val listCategory = Category.values().map { it }
 
-    private val listFoods = _uiState.value.foodsList.getMockData()
     private val listCity = _uiState.value.dropDownUiState.getMockData()
 
-    private val listBanner = listOf(
-        "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
-        "https://images.freeclues.com/assets/images/coupons/coupon_d5896d2fa2d3b567695acbca6fcadf42.jpg",
-        "https://f.roocdn.com/images/menus/500642/header-image.jpg?width=1200&amp;height=630&amp;auto=webp&amp;format=jpg&amp;fit=crop&amp;v=1616506412",
-        "https://avatars.mds.yandex.net/get-zen_doc/1586459/pub_5dded3b421cd6d24351dab4b_5dded4d416376423cc9592c6/scale_1200"
-    )
-
+    private val listBanner = _uiState.value.bannerList.getMockData()
 
     init {
-
         _uiState.update {
             it.copy(
                 bannerList = it.bannerList.copy(
@@ -49,15 +40,13 @@ class HomeViewModel @Inject constructor(
                 chipUiState = it.chipUiState.copy(
                     value = listCategory,
                 ),
-                foodsList = it.foodsList.copy(
-                    value = listFoods
-                ),
                 dropDownUiState = it.dropDownUiState.copy(
                     listCity = listCity,
                     selectedCity = listCity.first()
                 )
             )
         }
+        changeCategory(Category.BestFood)
     }
 
 
@@ -65,21 +54,33 @@ class HomeViewModel @Inject constructor(
 
         viewModelScope.launch {
             getFoodsUseCase(item).asResult().collect {
-                when(val result = it){
+                when (val result = it) {
                     is Result.Error -> {}
-                    is Result.Loading -> {}
-                    is Result.Success -> {_uiState.update { currentState ->
-                        currentState.copy(
-                            chipUiState = currentState.chipUiState.copy(
-                                selectedChip = item,
-                            ),
-                            foodsList = currentState.foodsList.copy(
-                                value = result.data
+                    is Result.Loading -> {
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                isLoading = true,
+                                chipUiState = currentState.chipUiState.copy(
+                                    loadingChip = item
+                                )
                             )
-                        )
-                    }}
+                        }
+                    }
+                    is Result.Success -> {
+                        _uiState.update { currentState ->
+                            currentState.copy(
+                                chipUiState = currentState.chipUiState.copy(
+                                    selectedChip = item,
+                                    loadingChip = null
+                                ),
+                                foodsList = currentState.foodsList.copy(
+                                    value = result.data
+                                ),
+                                isLoading = false
+                            )
+                        }
+                    }
                 }
-
             }
         }
     }
@@ -113,14 +114,23 @@ data class HomeUiState(
     val bannerList: CollectionBannerList = CollectionBannerList(),
     val chipUiState: ChipUiState = ChipUiState(),
     val foodsList: CollectionFoodsList = CollectionFoodsList(),
-    val dropDownUiState: DropDownUiState = DropDownUiState()
+    val dropDownUiState: DropDownUiState = DropDownUiState(),
+    val isLoading: Boolean = false,
 
-)
+    )
 
 @Immutable
 data class CollectionBannerList(
     val value: List<String> = emptyList()
-)
+) {
+    fun getMockData() = listOf(
+        "https://www.lifescapepremier.com/hubfs/iStock-835842214.jpg",
+        "https://st03.kakprosto.ru/images/article/2018/11/19/69536_5bf2ff2d130e15bf2ff2d1311d.jpeg",
+        "https://i6.photo.2gis.com/images/branch/0/30258560052036566_00e7.jpg",
+        "https://st03.kakprosto.ru/images/article/2018/11/19/69536_5bf2ff2d130e15bf2ff2d1311d.jpeg"
+    )
+
+}
 
 @Immutable
 data class DropDownUiState(
@@ -202,7 +212,9 @@ data class CollectionFoodsList(
 data class ChipUiState(
     val value: List<Category> = emptyList(),
     val selectedChip: Category = Category.BestFood,
+    val loadingChip: Category? = null
 )
+
 enum class Category(val cat: String) {
     BestFood("Популярные"),
     Burgers("Бургеры"),

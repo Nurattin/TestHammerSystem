@@ -16,7 +16,7 @@ android {
     defaultConfig {
         applicationId "com.example.testhammersystem"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -75,7 +75,7 @@ dependencies {
     androidTestImplementation Libs.AndroidX.Test.espressoCore
     debugImplementation Libs.AndroidX.Compose.tooling
     debugImplementation Libs.AndroidX.Compose.toolingPreview
-    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha02'
+    implementation Libs.AndroidX.Compose.lifecycleRuntimeCompose
 
     //Hilt
     implementation Libs.Hilt.android
@@ -101,9 +101,17 @@ dependencies {
     //System UI Controller
     implementation Libs.Accompanist.systemUiController
 
+    //Place Holder
+    implementation Libs.Accompanist.placeHolder
+
     // Pager
     implementation Libs.Accompanist.pager
 
     // Accompanist pager indicator
     implementation Libs.Accompanist.pagerIndicator
+
+    //Room
+    implementation Libs.Room.extensions
+    implementation Libs.Room.room
+    kapt Libs.Room.kapt
 }

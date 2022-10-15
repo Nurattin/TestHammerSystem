@@ -1,6 +1,10 @@
 package com.example.testhammersystem.data.di
 
+import android.app.Application
+import androidx.room.Room
 import com.example.testhammersystem.BuildConfig
+import com.example.testhammersystem.data.local.FoodDao
+import com.example.testhammersystem.data.local.FoodDatabase
 import com.example.testhammersystem.data.network.Api
 import dagger.Module
 import dagger.Provides
@@ -33,6 +37,20 @@ class DataModule {
             .addConverterFactory(GsonConverterFactory.create())
             .client(okHttpClient)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFoodDatabase(app: Application): FoodDatabase {
+        return Room.databaseBuilder(
+            app, FoodDatabase::class.java, "food_db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFoodDao(database: FoodDatabase): FoodDao{
+        return database.dao
     }
 
     @Provides

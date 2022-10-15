@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.testhammersystem.R
 import com.example.testhammersystem.util.lerp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -27,7 +29,7 @@ fun HorizontalPagerWithOffsetTransition(
 ) {
 
     HorizontalPager(
-        count = 10,
+        count = listBanners.size,
         contentPadding = PaddingValues(start = 16.dp, end = 42.dp),
         modifier = modifier.fillMaxWidth()
     ) { page ->
@@ -62,7 +64,8 @@ fun HorizontalPagerWithOffsetTransition(
                     .fillMaxSize(),
                 model = listBanners[page],
                 contentDescription = null,
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                placeholder = painterResource(id = R.drawable.ic_placeholder)
             )
         }
     }
