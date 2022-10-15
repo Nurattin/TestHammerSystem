@@ -17,19 +17,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.testhammersystem.ui.screen.main.CategoryChip
+import com.example.testhammersystem.ui.screen.main.Category
 import com.example.testhammersystem.ui.theme.InactiveElement
-import com.example.testhammersystem.ui.theme.MainSurface
 import com.example.testhammersystem.ui.theme.Primary
 import com.example.testhammersystem.ui.theme.ShadowColor
 import com.example.testhammersystem.util.drawColoredShadow
+import kotlin.reflect.KFunction1
 
 @Composable
 fun CategoryChipGroup(
     modifier: Modifier = Modifier,
-    listChip: List<CategoryChip>,
-    selectedChip: CategoryChip?,
-    onClickChip: (CategoryChip) -> Unit
+    listChip: List<Category>,
+    selectedChip: String,
+    onClickChip: KFunction1<Category, Unit>
 ) {
     LazyRow(
         modifier = modifier.background(Color.White),
@@ -40,7 +40,7 @@ fun CategoryChipGroup(
         items(items = listChip) { item ->
             Chip(
                 item = item,
-                isSelected = if (selectedChip == null) false else selectedChip == item,
+                isSelected = selectedChip == item.cat,
                 onClick = onClickChip
             )
         }
@@ -51,9 +51,9 @@ fun CategoryChipGroup(
 @Composable
 fun Chip(
     modifier: Modifier = Modifier,
-    item: CategoryChip,
+    item: Category,
     isSelected: Boolean,
-    onClick: (CategoryChip) -> Unit
+    onClick: (Category) -> Unit
 ) {
 
     val animateBackgroundColor =
@@ -81,7 +81,7 @@ fun Chip(
         Text(
             modifier = Modifier
                 .padding(vertical = 8.dp, horizontal = 20.dp),
-            text = item.title,
+            text = item.cat,
             style = MaterialTheme.typography.subtitle1,
             fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
             color = animateTextColor.value
@@ -93,9 +93,7 @@ fun Chip(
 @Composable
 private fun ChipIsSelectedPreview() {
     Chip(
-        item = CategoryChip(
-            id = 1, "Пицца"
-        ),
+        item = Category.BestFood,
         isSelected = true
     ) {
     }
@@ -105,9 +103,7 @@ private fun ChipIsSelectedPreview() {
 @Composable
 private fun ChipUnSelectedPreview() {
     Chip(
-        item = CategoryChip(
-            id = 1, "Пицца"
-        ),
+        item = Category.Burgers,
         isSelected = false
     ) {
     }

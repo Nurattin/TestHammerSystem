@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.testhammersystem.R
-import com.example.testhammersystem.data.model.Food
+import com.example.testhammersystem.domain.model.Food
 import com.example.testhammersystem.ui.theme.InactiveElement
 import com.example.testhammersystem.ui.theme.Primary
 import com.example.testhammersystem.ui.theme.PrimaryText

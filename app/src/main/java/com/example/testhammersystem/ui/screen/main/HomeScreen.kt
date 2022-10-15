@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +35,15 @@ fun HomeScreen(
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val scrollState = rememberLazyListState()
+
+    LaunchedEffect(
+        key1 = uiState.foodsList.value
+    ) {
+        if (scrollState.firstVisibleItemIndex > 2) {
+            scrollState.animateScrollToItem(1)
+        }
+    }
 
     with(uiState) {
         Column(modifier = modifier) {
@@ -56,20 +67,23 @@ fun HomeScreen(
                 listCity = dropDownUiState.listCity,
                 dropDownExpanded = dropDownUiState.isVisibility
             )
-            LazyColumn {
+            LazyColumn(
+                state = scrollState
+            ) {
                 item {
                     HorizontalPagerWithOffsetTransition(
                         modifier = Modifier.padding(
                             top = 16.dp,
                             bottom = 24.dp
-                        )
+                        ),
+                        listBanners = bannerList.value
                     )
                 }
                 stickyHeader {
                     CategoryChipGroup(
                         modifier = modifier.fillMaxWidth(),
                         listChip = chipUiState.value,
-                        selectedChip = chipUiState.selectedChip,
+                        selectedChip = chipUiState.selectedChip.cat,
                         onClickChip = viewModel::changeCategory
                     )
                 }

@@ -21,7 +21,11 @@ import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun HorizontalPagerWithOffsetTransition(modifier: Modifier = Modifier) {
+fun HorizontalPagerWithOffsetTransition(
+    modifier: Modifier = Modifier,
+    listBanners: List<String>
+) {
+
     HorizontalPager(
         count = 10,
         contentPadding = PaddingValues(start = 16.dp, end = 42.dp),
@@ -56,7 +60,7 @@ fun HorizontalPagerWithOffsetTransition(modifier: Modifier = Modifier) {
             AsyncImage(
                 modifier = Modifier
                     .fillMaxSize(),
-                model = "https://get.wallhere.com/photo/food-pizza-tomatoes-1719701.jpg",
+                model = listBanners[page],
                 contentDescription = null,
                 contentScale = ContentScale.Crop
             )
