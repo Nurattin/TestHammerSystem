@@ -1,24 +1,23 @@
 package com.example.testhammersystem.data.network
 
-import com.example.testhammersystem.domain.model.Food
+import com.example.testhammersystem.data.network.dto.FoodDto
 import retrofit2.http.GET
-import kotlinx.coroutines.flow.Flow
 
 interface Api {
 
     @GET("best-foods")
-    suspend fun getBestFoods(): List<Food>
+    suspend fun getBestFoods(): List<FoodDto>
 
     @GET("burgers")
-    suspend fun getBurgers(): List<Food>
+    suspend fun getBurgers(): List<FoodDto>
 
     @GET("drinks")
-    suspend fun getDrink(): List<Food>
+    suspend fun getDrink(): List<FoodDto>
 
     @GET("ice-cream")
-    suspend fun getIceCream(): List<Food>
+    suspend fun getIceCream(): List<FoodDto>
 
     @GET("pizzas")
-    suspend fun getPizzas(): List<Food>
+    suspend fun getPizzas(): List<FoodDto>
 
 }

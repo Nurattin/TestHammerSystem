@@ -1,6 +1,6 @@
 package com.example.testhammersystem.data.di
 
-import com.example.testhammersystem.data.FoodsDataRepositoryIml
+import com.example.testhammersystem.data.repository.FoodsDataRepositoryIml
 import com.example.testhammersystem.domain.reposiroty.FoodsDataRepository
 import dagger.Binds
 import dagger.Module

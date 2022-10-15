@@ -11,9 +11,11 @@ object Libs {
     object Accompanist {
         private const val version = "0.26.2-beta"
         const val insets = "com.google.accompanist:accompanist-insets:$version"
-        const val systemUiController = "com.google.accompanist:accompanist-systemuicontroller:$version"
+        const val systemUiController =
+            "com.google.accompanist:accompanist-systemuicontroller:$version"
         const val pager = "com.google.accompanist:accompanist-pager:$version"
         const val pagerIndicator = "com.google.accompanist:accompanist-pager-indicators:$version"
+        const val placeHolder = "com.google.accompanist:accompanist-placeholder:$version"
     }
 
     object Kotlin {
@@ -55,6 +57,7 @@ object Libs {
             const val uiTestManifest = "androidx.compose.ui:ui-test-manifest:$version"
             const val ui = "androidx.compose.ui:ui:$version"
             const val iconExtended = "androidx.compose.material:material-icons-extended:$version"
+            const val lifecycleRuntimeCompose = "androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha02"
         }
 
         object Core {
@@ -98,11 +101,20 @@ object Libs {
         private const val hilt = "2.43"
         private const val hiltComposeNavigation = "1.0.0"
 
-        const val composeNavigation = "androidx.hilt:hilt-navigation-compose:${hiltComposeNavigation}"
+        const val composeNavigation =
+            "androidx.hilt:hilt-navigation-compose:${hiltComposeNavigation}"
         const val gradlePlugin = "com.google.dagger:hilt-android-gradle-plugin:${hilt}"
         const val android = "com.google.dagger:hilt-android:${hilt}"
         const val compiler = "com.google.dagger:hilt-compiler:${hilt}"
         const val testing = "com.google.dagger:hilt-android-testing:${hilt}"
+    }
+
+    object Room {
+        private const val version = "2.4.3"
+        const val extensions = "androidx.room:room-ktx:$version"
+        const val room  = "androidx.room:room-runtime:$version"
+        const val kapt = "androidx.room:room-compiler:$version"
+
     }
 
     object JUnit {
@@ -119,7 +131,8 @@ object Libs {
         private const val version = "2.9.0"
         const val retrofit = "com.squareup.retrofit2:retrofit:$version"
         const val converterGson = "com.squareup.retrofit2:converter-gson:$version"
-        const val serializationConverter = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
+        const val serializationConverter =
+            "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0"
     }
 
     object OkHttps {
@@ -131,5 +144,6 @@ object Libs {
 
 object Urls {
     const val mavenCentralSnapshotRepo = "https://oss.sonatype.org/content/repositories/snapshots/"
-    const val composeSnapshotRepo = "https://androidx.dev/snapshots/builds/${Libs.AndroidX.Compose.snapshot}/artifacts/repository/"
+    const val composeSnapshotRepo =
+        "https://androidx.dev/snapshots/builds/${Libs.AndroidX.Compose.snapshot}/artifacts/repository/"
 }

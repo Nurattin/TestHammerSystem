@@ -1,10 +1,12 @@
 package com.example.testhammersystem.ui.screen.main.componet
 
+import androidx.compose.foundation.background
 import androidx.compose.material.DropdownMenu
 import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -21,14 +23,14 @@ fun SelectedCity(
     expanded: Boolean
 ) {
     DropdownMenu(
-        modifier = modifier,
+        modifier = modifier.background(Color.White),
         expanded = expanded,
-        onDismissRequest = { onDismissRequest() }) {
+        onDismissRequest = { onDismissRequest() },) {
 
         listCity.forEach { city ->
             DropdownMenuItem(
                 onClick = { onClickCity(city) },
-                enabled = city != selectedCity
+                enabled = city != selectedCity,
             ) {
                 Text(
                     text = city,
@@ -37,7 +39,7 @@ fun SelectedCity(
                     ),
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal,
-                    lineHeight = 18.75.sp
+                    lineHeight = 18.75.sp,
                 )
             }
         }

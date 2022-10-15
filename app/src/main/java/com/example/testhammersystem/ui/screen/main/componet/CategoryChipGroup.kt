@@ -2,16 +2,12 @@ package com.example.testhammersystem.ui.screen.main.componet
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -29,7 +25,8 @@ fun CategoryChipGroup(
     modifier: Modifier = Modifier,
     listChip: List<Category>,
     selectedChip: String,
-    onClickChip: KFunction1<Category, Unit>
+    onClickChip: KFunction1<Category, Unit>,
+    loadingChip: Category?
 ) {
     LazyRow(
         modifier = modifier.background(Color.White),
@@ -41,7 +38,8 @@ fun CategoryChipGroup(
             Chip(
                 item = item,
                 isSelected = selectedChip == item.cat,
-                onClick = onClickChip
+                onClick = onClickChip,
+                isLoading = loadingChip == item
             )
         }
     }
@@ -53,7 +51,8 @@ fun Chip(
     modifier: Modifier = Modifier,
     item: Category,
     isSelected: Boolean,
-    onClick: (Category) -> Unit
+    isLoading: Boolean,
+    onClick: (Category) -> Unit,
 ) {
 
     val animateBackgroundColor =
@@ -75,17 +74,32 @@ fun Chip(
             ),
         shape = MaterialTheme.shapes.small,
         onClick = { onClick(item) },
+        enabled = !isSelected,
         elevation = 0.dp,
         backgroundColor = animateBackgroundColor.value
     ) {
-        Text(
-            modifier = Modifier
-                .padding(vertical = 8.dp, horizontal = 20.dp),
-            text = item.cat,
-            style = MaterialTheme.typography.subtitle1,
-            fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
-            color = animateTextColor.value
-        )
+
+        Row(
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 8.dp),
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                modifier = Modifier,
+                text = item.cat,
+                style = MaterialTheme.typography.subtitle1,
+                fontWeight = if (isSelected) FontWeight.Medium else FontWeight.Normal,
+                color = animateTextColor.value
+            )
+            if (isLoading){
+                CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    strokeWidth = 2.dp,
+                    color = Primary
+                )
+            }
+        }
+
     }
 }
 
@@ -94,7 +108,8 @@ fun Chip(
 private fun ChipIsSelectedPreview() {
     Chip(
         item = Category.BestFood,
-        isSelected = true
+        isSelected = true,
+        isLoading = false
     ) {
     }
 }
@@ -104,7 +119,8 @@ private fun ChipIsSelectedPreview() {
 private fun ChipUnSelectedPreview() {
     Chip(
         item = Category.Burgers,
-        isSelected = false
+        isSelected = false,
+        isLoading = true
     ) {
     }
 }
